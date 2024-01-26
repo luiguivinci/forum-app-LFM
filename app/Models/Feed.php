@@ -16,6 +16,8 @@ class Feed extends Model
         'content'
     ];
 
+    protected $appends = ['liked'];
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
@@ -23,4 +25,13 @@ class Feed extends Model
     public function likes(): HasMany {
         return $this->HasMany(Like::class);
     }
+
+    public function getLikedAttribute(): bool {
+        return (bool) $this->likes()->where('feed_id', $this->id)->where('user_id', auth()->id())->exists();
+    }
+
+    public function comments(): HasMany {
+        return $this->hasMany(Comment::class);
+    }
+
 }
