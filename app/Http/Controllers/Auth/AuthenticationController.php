@@ -37,7 +37,7 @@ class AuthenticationController extends Controller
     public function login(LoginRequest $request){
         $request->validated();
 
-        $user = User::whereUsername($request->username)->first();
+        $user = User::whereEmail($request->email)->first();
         if(!$user || !Hash::check($request->password, $user->password)) {
             return response([
                 'message' => 'Invalid credentials',
@@ -49,6 +49,6 @@ class AuthenticationController extends Controller
         return response([
             'user' => $user,
             'token' => $token
-        ], 201);
+        ], 200);
     }
 }
